@@ -4,3 +4,21 @@ type Note @model {
   description: String
   image: String
 }
+
+type WarzonePlayer @model {
+  id: ID!
+  name: String!
+}
+
+type WarzoneResult {
+  playerId: String!
+  score: Int!
+  kills: Int!
+  deaths: Int!
+  damage: Int!
+}
+
+type WarzoneMatch @model {
+  id: ID!
+  results: [WarzoneResult]!
+}

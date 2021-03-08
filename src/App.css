@@ -36,3 +36,29 @@
     transform: rotate(360deg);
   }
 }
+
+html,
+body,
+#root,
+#warzone-container {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.tinted-container {
+  margin: 1em;
+  padding: 1em;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  color: white;
+}
+
+.warzone-logo {
+  font-family: "Sigmar One", cursive;
+  color: white;
+  text-align: center;
+  font-size: 60px;
+  margin: 0.1em;
+  line-height: 60px;
+}

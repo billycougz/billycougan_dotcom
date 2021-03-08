@@ -46,3 +46,99 @@ export const deleteNote = /* GraphQL */ `
     }
   }
 `;
+export const createWarzonePlayer = /* GraphQL */ `
+  mutation CreateWarzonePlayer(
+    $input: CreateWarzonePlayerInput!
+    $condition: ModelWarzonePlayerConditionInput
+  ) {
+    createWarzonePlayer(input: $input, condition: $condition) {
+      id
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateWarzonePlayer = /* GraphQL */ `
+  mutation UpdateWarzonePlayer(
+    $input: UpdateWarzonePlayerInput!
+    $condition: ModelWarzonePlayerConditionInput
+  ) {
+    updateWarzonePlayer(input: $input, condition: $condition) {
+      id
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteWarzonePlayer = /* GraphQL */ `
+  mutation DeleteWarzonePlayer(
+    $input: DeleteWarzonePlayerInput!
+    $condition: ModelWarzonePlayerConditionInput
+  ) {
+    deleteWarzonePlayer(input: $input, condition: $condition) {
+      id
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createWarzoneMatch = /* GraphQL */ `
+  mutation CreateWarzoneMatch(
+    $input: CreateWarzoneMatchInput!
+    $condition: ModelWarzoneMatchConditionInput
+  ) {
+    createWarzoneMatch(input: $input, condition: $condition) {
+      id
+      results {
+        playerId
+        score
+        kills
+        deaths
+        damage
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateWarzoneMatch = /* GraphQL */ `
+  mutation UpdateWarzoneMatch(
+    $input: UpdateWarzoneMatchInput!
+    $condition: ModelWarzoneMatchConditionInput
+  ) {
+    updateWarzoneMatch(input: $input, condition: $condition) {
+      id
+      results {
+        playerId
+        score
+        kills
+        deaths
+        damage
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteWarzoneMatch = /* GraphQL */ `
+  mutation DeleteWarzoneMatch(
+    $input: DeleteWarzoneMatchInput!
+    $condition: ModelWarzoneMatchConditionInput
+  ) {
+    deleteWarzoneMatch(input: $input, condition: $condition) {
+      id
+      results {
+        playerId
+        score
+        kills
+        deaths
+        damage
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;

@@ -1,0 +1,4 @@
+type WarzonePlayer @model {
+  id: ID!
+  name: String!
+}

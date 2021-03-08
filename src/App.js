@@ -7,6 +7,7 @@ import {
   createNote as createNoteMutation,
   deleteNote as deleteNoteMutation
 } from "./graphql/mutations";
+import Warzone from "./warzone/Warzone";
 
 const initialFormState = { name: "", description: "" };
 
@@ -64,7 +65,9 @@ function App() {
     fetchNotes();
   }
 
-  return (
+  return true ? (
+    <Warzone></Warzone>
+  ) : (
     <div className="App">
       <h1>My Notes App</h1>
       <input
