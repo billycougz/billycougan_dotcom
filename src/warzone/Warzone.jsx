@@ -3,6 +3,12 @@ import { createWarzoneMatch as createWarzoneMatchMutation } from "../graphql/mut
 import { API } from "aws-amplify";
 import { listWarzoneMatchs } from "../graphql/queries";
 import wallpaper from "./warzone.jpg";
+import { Table } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
+import ToggleButton from "react-bootstrap/ToggleButton";
+import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 
 export default class Warzone extends Component {
   constructor(props) {
@@ -11,15 +17,24 @@ export default class Warzone extends Component {
       players: [{}],
       friends: [],
       availablePlayers: [],
-      returnedMatches: []
+      returnedMatches: [],
+      view: "add",
+      isMobilePortrait: false
     };
   }
 
   componentDidMount() {
+    this.setIsMobilePortrait();
+    window.addEventListener("resize", () => this.setIsMobilePortrait());
     this.fetchWarzoneMatches();
     this.fetchFriends().then(friends => {
       this.setState({ players: [{}], friends, availablePlayers: friends });
     });
+  }
+
+  setIsMobilePortrait() {
+    const isMobilePortrait = window.innerWidth < 480;
+    this.setState({ isMobilePortrait });
   }
 
   fetchFriends() {
@@ -138,6 +153,7 @@ export default class Warzone extends Component {
   }
 
   onUpdatePlayer(event, playerIndex, attribute) {
+    console.log(event);
     const { players } = this.state;
     players[playerIndex][attribute] = event.target.value;
     this.setState({ players });
@@ -163,9 +179,7 @@ export default class Warzone extends Component {
       }
     }
     if (emptyCount) {
-      alert(
-        "There are " + emptyCount + " fields that still need to be entered."
-      );
+      alert("There are " + emptyCount + " empty fields.");
     } else {
       this.createWarzoneMatch();
       // const doSubmit = window.confirm("Ready to submit?");
@@ -179,117 +193,173 @@ export default class Warzone extends Component {
       "-webkit-background-size": "cover",
       "-moz-background-size": "cover",
       "-o-background-size": "cover",
-      "background-size": "cover"
+      "background-size": "cover",
+      "min-height": "1000px"
     };
     return (
       <div id="warzone-container" style={backgroundStyles}>
         <h1 className="warzone-logo">WARZONE</h1>
         <h1 className="warzone-logo">Tracker</h1>
-        <table className="tinted-container">
-          <thead>
-            <tr>
-              <th>Player</th>
-              <th>Score</th>
-              <th>Kills</th>
-              <th>Deaths</th>
-              <th>Damage</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.players.map((player, index) => (
-              <tr key={"player-" + index}>
-                <td>
-                  <select
-                    value={player.id}
-                    onChange={event =>
-                      this.onSelectPlayer(event, player, index)
-                    }
-                  >
-                    <option value={player.id}>
-                      {player.name ? player.name : ""}
-                    </option>
-                    {this.state.availablePlayers.map(
-                      (availablePlayer, index) => (
-                        <option
-                          key={"availablePlayer-" + index}
-                          value={availablePlayer.id}
-                        >
-                          {availablePlayer.name}
-                        </option>
-                      )
-                    )}
-                  </select>
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    onChange={event =>
-                      this.onUpdatePlayer(event, index, "score")
-                    }
-                  ></input>
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    onChange={event =>
-                      this.onUpdatePlayer(event, index, "kills")
-                    }
-                  ></input>
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    onChange={event =>
-                      this.onUpdatePlayer(event, index, "deaths")
-                    }
-                  ></input>
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    onChange={event =>
-                      this.onUpdatePlayer(event, index, "damage")
-                    }
-                  ></input>
-                </td>
-                <td>
-                  <button
-                    hidden={!index && this.state.players.length === 1}
-                    onClick={() => this.onRemovePlayer(player, index)}
-                  >
-                    Remove
-                  </button>
-                </td>
-              </tr>
-            ))}
-            <button
-              hidden={this.state.players.length === 4}
-              onClick={() => this.onAddPlayer()}
+        {this.state.isMobilePortrait && (
+          <Alert variant="warning">
+            When using a mobile device, it's recommended to view this app in
+            landscape mode.
+          </Alert>
+        )}
+        <div className="mb-3 text-center">
+          <ToggleButtonGroup type="checkbox" value={this.state.view}>
+            <ToggleButton
+              variant="light"
+              value="add"
+              onChange={e => {
+                this.setState({ view: "add" });
+              }}
             >
-              Add player
-            </button>
-            <button onClick={() => this.onSubmit()}>Submit</button>
-          </tbody>
-        </table>
-        <div className="tinted-container">
-          <label>Username</label>
-          <input
-            type="text"
-            onChange={event => {
-              this.findAverageName = event.target.value;
-            }}
-          ></input>
-          <button
-            onClick={() =>
-              this.getPlayerAverages(
-                this.state.returnedMatches,
-                this.findAverageName
-              )
-            }
-          >
-            Get averages
-          </button>
+              Add new game
+            </ToggleButton>
+            <ToggleButton
+              variant="light"
+              value="view"
+              onChange={e => {
+                this.setState({ view: "view" });
+              }}
+            >
+              View statistics
+            </ToggleButton>
+          </ToggleButtonGroup>
         </div>
+        {this.state.view === "add" && (
+          <div className="tinted-container">
+            <Table responsive>
+              <thead>
+                <tr>
+                  <th style={{ width: "33%" }}>Player</th>
+                  <th>Score</th>
+                  <th>Kills</th>
+                  <th>Deaths</th>
+                  <th>Damage</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.players.map((player, index) => (
+                  <tr key={"player-" + index}>
+                    <td>
+                      <Form.Group>
+                        <Form.Control
+                          value={player.id}
+                          onChange={event =>
+                            this.onSelectPlayer(event, player, index)
+                          }
+                          as="select"
+                          type="number"
+                        >
+                          <option value={player.id}>
+                            {player.name ? player.name : ""}
+                          </option>
+                          {this.state.availablePlayers.map(
+                            (availablePlayer, index) => (
+                              <option
+                                key={"availablePlayer-" + index}
+                                value={availablePlayer.id}
+                              >
+                                {availablePlayer.name}
+                              </option>
+                            )
+                          )}
+                        </Form.Control>
+                      </Form.Group>
+                    </td>
+                    <td>
+                      <Form.Group>
+                        <Form.Control
+                          type="number"
+                          onChange={event =>
+                            this.onUpdatePlayer(event, index, "score")
+                          }
+                        />
+                      </Form.Group>
+                    </td>
+                    <td>
+                      <Form.Group>
+                        <Form.Control
+                          type="number"
+                          onChange={event =>
+                            this.onUpdatePlayer(event, index, "kills")
+                          }
+                        />
+                      </Form.Group>
+                    </td>
+                    <td>
+                      <Form.Group>
+                        <Form.Control
+                          type="number"
+                          onChange={event =>
+                            this.onUpdatePlayer(event, index, "deaths")
+                          }
+                        />
+                      </Form.Group>
+                    </td>
+                    <td>
+                      <Form.Group>
+                        <Form.Control
+                          type="number"
+                          onChange={event =>
+                            this.onUpdatePlayer(event, index, "damage")
+                          }
+                        />
+                      </Form.Group>
+                    </td>
+                    <td>
+                      <Button
+                        variant="secondary"
+                        hidden={!index && this.state.players.length === 1}
+                        onClick={() => this.onRemovePlayer(player, index)}
+                      >
+                        X
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <div className="pl-3 pb-4">
+              <Button
+                className="mr-3"
+                variant="secondary"
+                hidden={this.state.players.length === 4}
+                onClick={() => this.onAddPlayer()}
+              >
+                Add player
+              </Button>
+              <Button variant="primary" onClick={() => this.onSubmit()}>
+                Submit
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {this.state.view === "view" && (
+          <div className="tinted-container">
+            <label>Username</label>
+            <input
+              type="text"
+              onChange={event => {
+                this.findAverageName = event.target.value;
+              }}
+            ></input>
+            <button
+              onClick={() =>
+                this.getPlayerAverages(
+                  this.state.returnedMatches,
+                  this.findAverageName
+                )
+              }
+            >
+              Get averages
+            </button>
+          </div>
+        )}
       </div>
     );
   }
