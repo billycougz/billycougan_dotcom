@@ -9,8 +9,9 @@ import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
+import { withAuthenticator } from "@aws-amplify/ui-react";
 
-export default class Warzone extends Component {
+class Warzone extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -364,3 +365,5 @@ export default class Warzone extends Component {
     );
   }
 }
+
+export default withAuthenticator(Warzone);
