@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { API, Storage } from "aws-amplify";
 import {
-  withAuthenticator,
   AmplifySignOut,
   AmplifyAuthenticator,
   AmplifySignUp
