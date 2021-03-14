@@ -22,7 +22,8 @@ exports.handler = async (event, context) => {
         __typename: { S: "User" },
         username: { S: event.userName },
         email: { S: event.request.userAttributes.email },
-        createdAt: { S: date.toISOString() }
+        createdAt: { S: date.toISOString() },
+        updatedAt: { S: date.toISOString() }
       },
       TableName: tableName
     };

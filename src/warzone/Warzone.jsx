@@ -10,6 +10,7 @@ import Alert from "react-bootstrap/Alert";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import { withAuthenticator } from "@aws-amplify/ui-react";
+import { listUsers } from "../graphql/queries";
 
 class Warzone extends Component {
   constructor(props) {
@@ -24,12 +25,18 @@ class Warzone extends Component {
     };
   }
 
+  async fetchUsers() {
+    const apiData = await API.graphql({ query: listUsers });
+    return apiData.data.listUsers ? apiData.data.listUsers.items : [];
+  }
+
   componentDidMount() {
     this.setIsMobilePortrait();
     window.addEventListener("resize", () => this.setIsMobilePortrait());
     this.fetchWarzoneMatches();
-    this.fetchFriends().then(friends => {
-      this.setState({ players: [{}], friends, availablePlayers: friends });
+    this.fetchUsers().then(users => {
+      console.log(users);
+      this.setState({ players: [{}], friends: users, availablePlayers: users });
     });
   }
 
@@ -38,24 +45,12 @@ class Warzone extends Component {
     this.setState({ isMobilePortrait });
   }
 
-  fetchFriends() {
-    const friends = [
-      { id: 1, name: "willycougz" },
-      { id: 2, name: "smittytheman" },
-      { id: 3, name: "pkcsmokecity" },
-      { id: 4, name: "jacobmoneybagz" }
-    ];
-    return new Promise(resolve => {
-      resolve(friends);
-    });
-  }
-
   async createWarzoneMatch() {
     let { players } = this.state;
     players.forEach(player => {
       player.playerId = player.id.toString();
       delete player.id;
-      delete player.name;
+      delete player.username;
     });
     const data = {
       results: players
@@ -107,7 +102,7 @@ class Warzone extends Component {
   }
 
   getPlayerIdFromName(name) {
-    const friend = this.state.friends.find(friend => friend.name == name);
+    const friend = this.state.friends.find(friend => friend.username == name);
     return friend ? friend.id : null;
   }
 
@@ -128,7 +123,7 @@ class Warzone extends Component {
       player => player.id == event.target.value
     );
     player.id = selectedPlayer.id;
-    player.name = selectedPlayer.name;
+    player.username = selectedPlayer.username;
     players[playerIndex] = player;
     // Update the available players
     availablePlayers = this.state.availablePlayers.filter(
@@ -256,7 +251,7 @@ class Warzone extends Component {
                           type="number"
                         >
                           <option value={player.id}>
-                            {player.name ? player.name : ""}
+                            {player.username ? player.username : ""}
                           </option>
                           {this.state.availablePlayers.map(
                             (availablePlayer, index) => (
@@ -264,7 +259,7 @@ class Warzone extends Component {
                                 key={"availablePlayer-" + index}
                                 value={availablePlayer.id}
                               >
-                                {availablePlayer.name}
+                                {availablePlayer.username}
                               </option>
                             )
                           )}
