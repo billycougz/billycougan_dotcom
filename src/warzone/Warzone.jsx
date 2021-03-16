@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { createWarzoneMatch as createWarzoneMatchMutation } from "../graphql/mutations";
 import { API } from "aws-amplify";
 import { listWarzoneMatchs } from "../graphql/queries";
-import wallpaper from "./warzone.jpg";
 import { Table } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -11,6 +10,7 @@ import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import { listUsers } from "../graphql/queries";
+import "./warzone.css";
 
 class Warzone extends Component {
   constructor(props) {
@@ -20,8 +20,7 @@ class Warzone extends Component {
       friends: [],
       availablePlayers: [],
       returnedMatches: [],
-      view: "add",
-      isMobilePortrait: false
+      view: "add"
     };
   }
 
@@ -31,18 +30,11 @@ class Warzone extends Component {
   }
 
   componentDidMount() {
-    this.setIsMobilePortrait();
-    window.addEventListener("resize", () => this.setIsMobilePortrait());
     this.fetchWarzoneMatches();
     this.fetchUsers().then(users => {
       console.log(users);
       this.setState({ players: [{}], friends: users, availablePlayers: users });
     });
-  }
-
-  setIsMobilePortrait() {
-    const isMobilePortrait = window.innerWidth < 480;
-    this.setState({ isMobilePortrait });
   }
 
   async createWarzoneMatch() {
@@ -184,24 +176,14 @@ class Warzone extends Component {
   }
 
   render() {
-    const backgroundStyles = {
-      background: "url(" + wallpaper + ") no-repeat center center fixed",
-      "-webkit-background-size": "cover",
-      "-moz-background-size": "cover",
-      "-o-background-size": "cover",
-      "background-size": "cover",
-      "min-height": "1000px"
-    };
     return (
-      <div id="warzone-container" style={backgroundStyles}>
+      <div id="warzone-container">
         <h1 className="warzone-logo">WARZONE</h1>
         <h1 className="warzone-logo">Tracker</h1>
-        {this.state.isMobilePortrait && (
-          <Alert variant="warning">
-            When using a mobile device, it's recommended to view this app in
-            landscape mode.
-          </Alert>
-        )}
+        <Alert variant="warning" className="portrait-warning">
+          When using a mobile device, it's recommended to view this app in
+          landscape mode.
+        </Alert>
         <div className="mb-3 text-center">
           <ToggleButtonGroup type="checkbox" value={this.state.view}>
             <ToggleButton
@@ -270,6 +252,7 @@ class Warzone extends Component {
                       <Form.Group>
                         <Form.Control
                           type="number"
+                          inputmode="numeric"
                           onChange={event =>
                             this.onUpdatePlayer(event, index, "score")
                           }
@@ -280,6 +263,7 @@ class Warzone extends Component {
                       <Form.Group>
                         <Form.Control
                           type="number"
+                          inputmode="numeric"
                           onChange={event =>
                             this.onUpdatePlayer(event, index, "kills")
                           }
@@ -290,6 +274,7 @@ class Warzone extends Component {
                       <Form.Group>
                         <Form.Control
                           type="number"
+                          inputmode="numeric"
                           onChange={event =>
                             this.onUpdatePlayer(event, index, "deaths")
                           }
