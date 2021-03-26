@@ -1,9 +1,13 @@
 import React from "react";
-import PDF from "./Spotify.pdf";
 
 function Spotify() {
   return (
-    <iframe src={PDF} height="100%" width="100%" scrolling="auto"></iframe>
+    <iframe
+      height="100%"
+      width="100%"
+      scrolling="auto"
+      src="https://docs.google.com/document/d/e/2PACX-1vS_OaUo7zz4ar_nk1ouuOCxlXmsU1wanVh2Zq7KBlLTKqdkF-iSzRRKYl9_ZgUo69KyXtAXx0igJ0SN/pub?embedded=true"
+    ></iframe>
   );
 }
 
