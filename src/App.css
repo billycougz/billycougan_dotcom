@@ -5,8 +5,36 @@ html {
 
 html,
 body,
-#root {
+#root,
+#home-container {
   min-width: 100%;
   max-width: 100%;
-  height: 100%;
+  height: calc(100% + 6px);
+}
+
+#home-container {
+  background: #1ed761;
+}
+
+#typewriter-text {
+  font-weight: bold;
+  font-size: 8vw;
+  color: white;
+  margin: 0;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+#sub-text {
+  font-size: 5vw;
+  color: white;
+  margin: 0;
+  position: absolute;
+  top: calc(45% + 1.5em);
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
