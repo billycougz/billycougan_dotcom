@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { createWarzoneMatch as createWarzoneMatchMutation } from "../graphql/mutations";
-import { API } from "aws-amplify";
+import { API, Auth } from "aws-amplify";
 import { listWarzoneMatchs } from "../graphql/queries";
 import { Table } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
@@ -16,10 +16,11 @@ class Warzone extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentUser: null,
       players: [{}],
       friends: [],
       availablePlayers: [],
-      returnedMatches: [],
+      matches: [],
       view: "add"
     };
   }
@@ -33,8 +34,20 @@ class Warzone extends Component {
     this.fetchWarzoneMatches();
     this.fetchUsers().then(users => {
       console.log(users);
-      this.setState({ players: [{}], friends: users, availablePlayers: users });
+      this.findCurrentUser(users);
+      this.setState({
+        players: [{}],
+        friends: users,
+        availablePlayers: users
+      });
     });
+  }
+
+  async findCurrentUser(users) {
+    const { attributes } = await Auth.currentAuthenticatedUser();
+    const currentUser = users.find(user => user.id === attributes.sub);
+    console.log(currentUser);
+    this.setState({ currentUser });
   }
 
   async createWarzoneMatch() {
@@ -63,18 +76,16 @@ class Warzone extends Component {
       })
     );
     console.log(matches);
-    this.setState({ returnedMatches: matches });
+    this.setState({ matches });
     //setNotes(apiData.data.ListWarzoneMatchs.items);
   }
 
-  getPlayerAverages(data, playerName) {
-    const playerId = this.getPlayerIdFromName(playerName);
-    console.log(playerName);
+  getPlayerAverages(playerId) {
     const totals = { score: 0, kills: 0, deaths: 0, damage: 0 };
     let count = 0;
-    data.forEach(item => {
+    this.state.matches.forEach(item => {
       const playerResult = item.results.find(
-        result => result.playerId == playerId
+        result => result.playerId === playerId
       );
       if (playerResult) {
         totals.score += playerResult.score;
@@ -84,18 +95,17 @@ class Warzone extends Component {
         count++;
       }
     });
-    const averages = {
+    return {
       score: totals.score / count,
       kills: totals.kills / count,
       deaths: totals.deaths / count,
       damage: totals.damage / count
     };
-    console.log(averages);
   }
 
-  getPlayerIdFromName(name) {
-    const friend = this.state.friends.find(friend => friend.username == name);
-    return friend ? friend.id : null;
+  getPlayerNameFromId(id) {
+    const friend = this.state.friends.find(friend => friend.id === id);
+    return friend ? friend.username : null;
   }
 
   onAddPlayer() {
@@ -108,18 +118,18 @@ class Warzone extends Component {
     let { players, availablePlayers, friends } = this.state;
     // Store the previously selected player - will need to be added back to available players
     const previouslySelectedPlayer = friends.find(
-      friend => friend.id == player.id
+      friend => friend.id === player.id
     );
     // Update the selected player
     const selectedPlayer = availablePlayers.find(
-      player => player.id == event.target.value
+      player => player.id === event.target.value
     );
     player.id = selectedPlayer.id;
     player.username = selectedPlayer.username;
     players[playerIndex] = player;
     // Update the available players
     availablePlayers = this.state.availablePlayers.filter(
-      player => player.id != event.target.value
+      player => player.id !== event.target.value
     );
     if (previouslySelectedPlayer) {
       availablePlayers.push(previouslySelectedPlayer);
@@ -131,7 +141,7 @@ class Warzone extends Component {
     let { players, availablePlayers, friends } = this.state;
     // Store the previously selected player - will need to be added back to available players
     const previouslySelectedPlayer = friends.find(
-      friend => friend.id == player.id
+      friend => friend.id === player.id
     );
     if (previouslySelectedPlayer) {
       availablePlayers.push(previouslySelectedPlayer);
@@ -153,16 +163,16 @@ class Warzone extends Component {
       if (!player.id) {
         emptyCount++;
       }
-      if (!player.score && player.score != 0) {
+      if (!player.score && player.score !== 0) {
         emptyCount++;
       }
-      if (!player.kills && player.kills != 0) {
+      if (!player.kills && player.kills !== 0) {
         emptyCount++;
       }
-      if (!player.deaths && player.deaths != 0) {
+      if (!player.deaths && player.deaths !== 0) {
         emptyCount++;
       }
-      if (!player.damage && player.damage != 0) {
+      if (!player.damage && player.damage !== 0) {
         emptyCount++;
       }
     }
@@ -178,7 +188,7 @@ class Warzone extends Component {
   render() {
     return (
       <div id="warzone-container">
-        <h1 className="warzone-logo">WARZONE</h1>
+        <h1 className="warzone-logo pt-2">WARZONE</h1>
         <h1 className="warzone-logo">Tracker</h1>
         <Alert variant="warning" className="portrait-warning">
           When using a mobile device, it's recommended to view this app in
@@ -193,16 +203,25 @@ class Warzone extends Component {
                 this.setState({ view: "add" });
               }}
             >
-              Add new game
+              Add Game
             </ToggleButton>
             <ToggleButton
               variant="light"
-              value="view"
+              value="history"
               onChange={e => {
-                this.setState({ view: "view" });
+                this.setState({ view: "history" });
               }}
             >
-              View statistics
+              View History
+            </ToggleButton>
+            <ToggleButton
+              variant="light"
+              value="averages"
+              onChange={e => {
+                this.setState({ view: "averages" });
+              }}
+            >
+              View Averages
             </ToggleButton>
           </ToggleButtonGroup>
         </div>
@@ -214,7 +233,7 @@ class Warzone extends Component {
                   <th style={{ width: "33%" }}>Player</th>
                   <th>Score</th>
                   <th>Kills</th>
-                  <th>Deaths</th>
+                  <th>Contracts</th>
                   <th>Damage</th>
                   <th></th>
                 </tr>
@@ -252,7 +271,7 @@ class Warzone extends Component {
                       <Form.Group>
                         <Form.Control
                           type="number"
-                          inputmode="numeric"
+                          inputMode="numeric"
                           onChange={event =>
                             this.onUpdatePlayer(event, index, "score")
                           }
@@ -263,7 +282,7 @@ class Warzone extends Component {
                       <Form.Group>
                         <Form.Control
                           type="number"
-                          inputmode="numeric"
+                          inputMode="numeric"
                           onChange={event =>
                             this.onUpdatePlayer(event, index, "kills")
                           }
@@ -274,7 +293,7 @@ class Warzone extends Component {
                       <Form.Group>
                         <Form.Control
                           type="number"
-                          inputmode="numeric"
+                          inputMode="numeric"
                           onChange={event =>
                             this.onUpdatePlayer(event, index, "deaths")
                           }
@@ -320,25 +339,68 @@ class Warzone extends Component {
           </div>
         )}
 
-        {this.state.view === "view" && (
+        {this.state.view === "history" &&
+          this.state.matches.map((match, index) => (
+            <div key={index}>
+              <div className="tinted-container">
+                <p className="date">
+                  {new Date(match.createdAt).toDateString()}
+                  {" · "}
+                  {new Date(match.createdAt).toLocaleTimeString()}
+                </p>
+                <Table responsive>
+                  <thead>
+                    <tr>
+                      <th style={{ width: "33%" }}>Player</th>
+                      <th>Score</th>
+                      <th>Kills</th>
+                      <th>Contracts</th>
+                      <th>Damage</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {match.results.map((result, index) => (
+                      <tr key={index}>
+                        <td>{this.getPlayerNameFromId(result.playerId)}</td>
+                        <td>{result.score}</td>
+                        <td>{result.kills}</td>
+                        <td>{result.deaths}</td>
+                        <td>{result.damage}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+              <br />
+            </div>
+          ))}
+        {this.state.view === "averages" && (
           <div className="tinted-container">
-            <label>Username</label>
-            <input
-              type="text"
-              onChange={event => {
-                this.findAverageName = event.target.value;
-              }}
-            ></input>
-            <button
-              onClick={() =>
-                this.getPlayerAverages(
-                  this.state.returnedMatches,
-                  this.findAverageName
-                )
-              }
-            >
-              Get averages
-            </button>
+            <Table responsive>
+              <thead>
+                <tr>
+                  <th style={{ width: "33%" }}>Player</th>
+                  <th>Score</th>
+                  <th>Kills</th>
+                  <th>Contracts</th>
+                  <th>Damage</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.friends.map((player, index) => {
+                  const averages = this.getPlayerAverages(player.id);
+                  return !averages.score ? null : (
+                    <tr key={index}>
+                      <td>{this.getPlayerNameFromId(player.id)}</td>
+                      <td>{averages.score}</td>
+                      <td>{averages.kills}</td>
+                      <td>{averages.deaths}</td>
+                      <td>{averages.damage}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
           </div>
         )}
       </div>

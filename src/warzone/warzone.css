@@ -23,15 +23,24 @@
   background-color: rgba(0, 0, 0, 0.5);
   max-width: 768px;
   margin: auto;
-}
-
-.tinted-container table th {
-  text-align: center;
   color: white !important;
 }
 
-th,
-td {
+.table {
+  margin-bottom: 0 !important;
+}
+
+.date {
+  padding: 5px;
+  margin: 0;
+  font-weight: bold;
+  border-top: 1px solid darkgray !important;
+}
+
+.tinted-container table th,
+.tinted-container table td {
+  text-align: center;
+  color: white !important;
   border-top: 1px solid darkgray !important;
   border-bottom: none !important;
 }

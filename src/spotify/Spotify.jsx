@@ -3,6 +3,7 @@ import React from "react";
 function Spotify() {
   return (
     <iframe
+      title="Spotify Cover Letter"
       height="100%"
       width="100%"
       scrolling="auto"
