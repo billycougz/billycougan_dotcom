@@ -190,9 +190,8 @@ class Warzone extends Component {
       <div id="warzone-container">
         <h1 className="warzone-logo pt-2">WARZONE</h1>
         <h1 className="warzone-logo">Tracker</h1>
-        <Alert variant="warning" className="portrait-warning">
-          When using a mobile device, it's recommended to view this app in
-          landscape mode.
+        <Alert variant="warning" className="portrait-warning text-center">
+          It's recommended to view this app in landscape mode.
         </Alert>
         <div className="mb-3 text-center">
           <ToggleButtonGroup type="checkbox" value={this.state.view}>
