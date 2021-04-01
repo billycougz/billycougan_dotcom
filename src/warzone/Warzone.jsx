@@ -303,6 +303,7 @@ class Warzone extends Component {
                       <Form.Group>
                         <Form.Control
                           type="number"
+                          inputMode="numeric"
                           onChange={event =>
                             this.onUpdatePlayer(event, index, "damage")
                           }
