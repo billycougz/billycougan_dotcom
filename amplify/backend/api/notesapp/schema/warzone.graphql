@@ -8,8 +8,6 @@ type WarzoneResult {
   score: Int!
   kills: Int!
   deaths: Int!
-  contracts: Int!
-
   damage: Int!
 }
 
