@@ -32,6 +32,16 @@
     "categories": {
       "auth": {
         "billycougandotcom80aa15d6": {}
+      },
+      "function": {
+        "smsTrigger": {
+          "deploymentBucketName": "amplify-amplify375c6f4608ed4-staging-31945-deployment",
+          "s3Key": "amplify-builds/smsTrigger-6b6b723845644d393557-build.zip"
+        },
+        "createUserOnSignup": {
+          "deploymentBucketName": "amplify-amplify375c6f4608ed4-staging-31945-deployment",
+          "s3Key": "amplify-builds/createUserOnSignup-6956786142754f574c49-build.zip"
+        }
       }
     }
   }
