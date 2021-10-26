@@ -392,10 +392,10 @@ class Warzone extends Component {
                   return !averages.score ? null : (
                     <tr key={index}>
                       <td>{this.getPlayerNameFromId(player.id)}</td>
-                      <td>{averages.score}</td>
-                      <td>{averages.kills}</td>
-                      <td>{averages.deaths}</td>
-                      <td>{averages.damage}</td>
+                      <td>{Math.round(averages.score)}</td>
+                      <td>{Math.round(averages.kills)}</td>
+                      <td>{Math.round(averages.deaths)}</td>
+                      <td>{Math.round(averages.damage)}</td>
                     </tr>
                   );
                 })}

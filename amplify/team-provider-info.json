@@ -1,4 +1,22 @@
 {
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-billycougandotcom-prod-163526-authRole",
+      "UnauthRoleArn": "arn:aws:iam::210534634664:role/amplify-billycougandotcom-prod-163526-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::210534634664:role/amplify-billycougandotcom-prod-163526-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-billycougandotcom-prod-163526-deployment",
+      "UnauthRoleName": "amplify-billycougandotcom-prod-163526-unauthRole",
+      "StackName": "amplify-billycougandotcom-prod-163526",
+      "StackId": "arn:aws:cloudformation:us-west-2:210534634664:stack/amplify-billycougandotcom-prod-163526/9888f900-949a-11eb-b88f-02fbce70fc7f",
+      "AmplifyAppId": "d8aqb4ar9f90h"
+    },
+    "categories": {
+      "auth": {
+        "billycougandotcom80aa15d6": {}
+      }
+    }
+  },
   "staging": {
     "awscloudformation": {
       "AuthRoleName": "amplify-amplify375c6f4608ed4-staging-31945-authRole",

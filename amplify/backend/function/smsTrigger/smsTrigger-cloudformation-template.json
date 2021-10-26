@@ -17,6 +17,12 @@
     "apinotesappGraphQLAPIEndpointOutput": {
       "Type": "String",
       "Default": "apinotesappGraphQLAPIEndpointOutput"
+    },
+    "deploymentBucketName": {
+      "Type": "String"
+    },
+    "s3Key": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -76,8 +82,12 @@
         "Layers": [],
         "Timeout": "25",
         "Code": {
-          "S3Bucket": "amplify-amplify375c6f4608ed4-staging-31945-deployment",
-          "S3Key": "amplify-builds/smsTrigger-6b6b723845644d393557-build.zip"
+          "S3Bucket": {
+            "Ref": "deploymentBucketName"
+          },
+          "S3Key": {
+            "Ref": "s3Key"
+          }
         }
       }
     },
