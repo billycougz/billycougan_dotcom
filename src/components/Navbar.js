@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     color: secondary,
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "1.2rem",
+    },
   },
   titlep2: {
     fontWeight: "100",
