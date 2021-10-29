@@ -2,9 +2,8 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
-import Facebook from "@material-ui/icons/Facebook";
-import Twitter from "@material-ui/icons/Twitter";
-import Instagram from "@material-ui/icons/Instagram";
+import { GitHub, LinkedIn } from "@material-ui/icons";
+import { primary, secondary } from "../utils/colors";
 
 const useStyles = makeStyles({
   bottomNavContainer: {
@@ -12,9 +11,9 @@ const useStyles = makeStyles({
   },
   root: {
     "& .MuiSvgIcon-root": {
-      fill: "tan",
+      fill: secondary,
       "&:hover": {
-        fill: "tomato",
+        fill: primary,
         fontSize: "1.8rem",
       },
     },
@@ -26,9 +25,18 @@ const Footer = () => {
 
   return (
     <BottomNavigation className={classes.bottomNavContainer}>
-      <BottomNavigationAction icon={<Facebook />} className={classes.root} />
-      <BottomNavigationAction icon={<Twitter />} className={classes.root} />
-      <BottomNavigationAction icon={<Instagram />} className={classes.root} />
+      <BottomNavigationAction
+        icon={<LinkedIn />}
+        target="_blank"
+        href="https://www.linkedin.com/in/williamcougan/"
+        className={classes.root}
+      />
+      <BottomNavigationAction
+        icon={<GitHub />}
+        className={classes.root}
+        target="_blank"
+        href="https://github.com/billycougz"
+      />
     </BottomNavigation>
   );
 };
