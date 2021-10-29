@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
       right: "-0.625rem",
       top: "calc(50% - 5px)",
       borderStyle: "solid",
-      borderColor: "primary primary transparent transparent",
+      borderColor: `${primary} ${primary} transparent transparent`,
       borderWidth: "0.625rem",
       transform: "rotate(45deg)",
     },
@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
       "&:nth-of-type(2n):before": {
         right: "auto",
         left: "-0.625rem",
-        borderColor: "transparent transparent primary primary",
+        borderColor: `transparent transparent ${primary} ${primary}`,
       },
     },
   },
@@ -122,7 +122,7 @@ const Resume = () => {
           variant="h2"
           className={`${classes.timeLineYear} ${classes.timeLineItem}`}
         >
-          2013
+          Present
         </Typography>
         <Box component="div" className={classes.timeLineItem}>
           <Typography
@@ -130,27 +130,25 @@ const Resume = () => {
             align="center"
             className={classes.subHeading}
           >
-            web design
+            Staff Software Engineer
           </Typography>
           <Typography variant="body1" align="center" className={classes.body1}>
-            company name where worked
+            The Hartford
           </Typography>
           <Typography
             variant="subtitle1"
             align="center"
             className={classes.subtitle1}
           >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quas
-            ipsa, laudantium totam perferendis possimus voluptatibus tenetur.
-            Quasi voluptatibus, nam vitae eaque ad, officia laboriosam
-            repudiandae, rerum necessitatibus nisi mollitia.
+            Lead a team of developers for The Hartford's Agile Center of
+            Enablement.
           </Typography>
         </Box>
         <Typography
           variant="h2"
           className={`${classes.timeLineYear} ${classes.timeLineItem}`}
         >
-          2014
+          2021
         </Typography>
         <Box component="div" className={classes.timeLineItem}>
           <Typography
@@ -158,48 +156,18 @@ const Resume = () => {
             align="center"
             className={classes.subHeading}
           >
-            html & css
+            Software Engineer
           </Typography>
           <Typography variant="body1" align="center" className={classes.body1}>
-            company name where worked
+            The Hartford
           </Typography>
           <Typography
             variant="subtitle1"
             align="center"
             className={classes.subtitle1}
           >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quas
-            ipsa, laudantium totam perferendis possimus voluptatibus tenetur.
-            Quasi voluptatibus, nam vitae eaque ad, officia laboriosam
-            repudiandae, rerum necessitatibus nisi mollitia.
-          </Typography>
-        </Box>
-        <Typography
-          variant="h2"
-          className={`${classes.timeLineYear} ${classes.timeLineItem}`}
-        >
-          2015
-        </Typography>
-        <Box component="div" className={classes.timeLineItem}>
-          <Typography
-            variant="h5"
-            align="center"
-            className={classes.subHeading}
-          >
-            Fullstack Javascript
-          </Typography>
-          <Typography variant="body1" align="center" className={classes.body1}>
-            company name where worked
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            align="center"
-            className={classes.subtitle1}
-          >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quas
-            ipsa, laudantium totam perferendis possimus voluptatibus tenetur.
-            Quasi voluptatibus, nam vitae eaque ad, officia laboriosam
-            repudiandae, rerum necessitatibus nisi mollitia.
+            Lead developer on The Hartford's customer facing auto & home
+            insurance sales application.
           </Typography>
         </Box>
         <Typography
@@ -214,22 +182,52 @@ const Resume = () => {
             align="center"
             className={classes.subHeading}
           >
-            Django & React
+            Technology Leadership Development Program
           </Typography>
           <Typography variant="body1" align="center" className={classes.body1}>
-            company name where worked
+            The Hartford
           </Typography>
           <Typography
             variant="subtitle1"
             align="center"
             className={classes.subtitle1}
           >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero quas
-            ipsa, laudantium totam perferendis possimus voluptatibus tenetur.
-            Quasi voluptatibus, nam vitae eaque ad, officia laboriosam
-            repudiandae, rerum necessitatibus nisi mollitia.
+            Associate in The Hartford's 3 year Technology Leadership Development
+            Program.
           </Typography>
         </Box>
+        <Typography
+          variant="h2"
+          className={`${classes.timeLineYear} ${classes.timeLineItem}`}
+        >
+          2016
+        </Typography>
+        <Box component="div" className={classes.timeLineItem}>
+          <Typography
+            variant="h5"
+            align="center"
+            className={classes.subHeading}
+          >
+            Commercial Insurance Underwriter
+          </Typography>
+          <Typography variant="body1" align="center" className={classes.body1}>
+            The Hartford
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            align="center"
+            className={classes.subtitle1}
+          >
+            Underwriter responsible for our book of business and agency
+            relationships within NYC and Westchester County.
+          </Typography>
+        </Box>
+        <Typography
+          variant="h2"
+          className={`${classes.timeLineYear} ${classes.timeLineItem}`}
+        >
+          2015
+        </Typography>
       </Box>
     </Box>
   );

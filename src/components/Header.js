@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import Grid from "@material-ui/core/Grid";
@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = () => {
   const classes = useStyles();
+  const [showNameCursor, setShowNameCursor] = useState(true);
 
   return (
     <Box className={classes.typedContainer}>
@@ -57,6 +58,7 @@ const Header = () => {
           ]}
           typeSpeed={40}
           backSpeed={50}
+          backDelay={500}
           loop
         />
       </Typography>

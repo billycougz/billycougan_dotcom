@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, BrowserRouter as Router } from "react-router-dom";
 import Drawer from "@material-ui/core/Drawer";
 import Box from "@material-ui/core/Box";
 import AppBar from "@material-ui/core/AppBar";
@@ -12,32 +12,33 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Avatar from "@material-ui/core/Avatar";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
-import ArrowBack from "@material-ui/icons/ArrowBack";
+import Menu from "@material-ui/icons/Menu";
 import AssignmentInd from "@material-ui/icons/AssignmentInd";
 import Home from "@material-ui/icons/Home";
 import Apps from "@material-ui/icons/Apps";
 import { makeStyles } from "@material-ui/core/styles";
 import Footer from "../components/Footer";
 import { primary, secondary } from "../utils/colors";
+import { LinkedIn } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
     background: "#222",
     margin: 0,
   },
-  arrow: {
+  menuIcon: {
     color: secondary,
   },
   title: {
     color: secondary,
     [theme.breakpoints.down("xs")]: {
-      fontSize: "1.2rem",
+      display: "none",
     },
   },
   titlep2: {
     fontWeight: "100",
     [theme.breakpoints.down("xs")]: {
-      fontSize: "1.2rem",
+      display: "none",
     },
   },
   menuSliderContainer: {
@@ -54,13 +55,32 @@ const useStyles = makeStyles((theme) => ({
   },
   listItem: {
     color: secondary,
+    "&:hover": {
+      backgroundColor: primary,
+      color: secondary,
+    },
   },
 }));
 
 const menuItems = [
   { listIcon: <Home />, listText: "Home", listPath: "/" },
-  { listIcon: <AssignmentInd />, listText: "Resume", listPath: "/resume" },
-  { listIcon: <Apps />, listText: "Portfolio", listPath: "/portfolio" },
+  {
+    listIcon: <LinkedIn />,
+    listText: "LinkedIn",
+    href: "//www.linkedin.com/in/williamcougan/",
+  },
+  {
+    listIcon: <AssignmentInd />,
+    listText: "Resume",
+    listPath: "/resume",
+    hidden: true,
+  },
+  {
+    listIcon: <Apps />,
+    listText: "Portfolio",
+    listPath: "/portfolio",
+    hidden: true,
+  },
 ];
 
 const Navbar = () => {
@@ -75,21 +95,24 @@ const Navbar = () => {
       </Avatar>
       <Divider />
       <List>
-        {menuItems.map((item, i) => (
-          <ListItem
-            button
-            key={i}
-            className={classes.listItem}
-            onClick={() => setOpen(false)}
-            component={Link}
-            to={item.listPath}
-          >
-            <ListItemIcon className={classes.listItem}>
-              {item.listIcon}
-            </ListItemIcon>
-            <ListItemText primary={item.listText} />
-          </ListItem>
-        ))}
+        {menuItems
+          .filter((item) => !item.hidden)
+          .map((item, i) => (
+            <ListItem
+              button
+              key={i}
+              className={classes.listItem}
+              onClick={() => setOpen(false)}
+              component={Link}
+              target={item.href && "_blank"}
+              to={item.listPath || item.href}
+            >
+              <ListItemIcon className={classes.listItem}>
+                {item.listIcon}
+              </ListItemIcon>
+              <ListItemText primary={item.listText} />
+            </ListItem>
+          ))}
       </List>
     </Box>
   );
@@ -100,7 +123,7 @@ const Navbar = () => {
         <AppBar position="static" className={classes.appbar}>
           <Toolbar>
             <IconButton onClick={() => setOpen(true)}>
-              {false && <ArrowBack className={classes.arrow} />}
+              {true && <Menu className={classes.menuIcon} />}
             </IconButton>
             <Typography variant="h5" className={classes.title}>
               William Cougan{" "}
@@ -111,6 +134,7 @@ const Navbar = () => {
       </Box>
       <Drawer open={open} anchor="right" onClose={() => setOpen(false)}>
         {sideList()}
+        <Footer />
       </Drawer>
     </React.Fragment>
   );
